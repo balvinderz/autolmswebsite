@@ -1,62 +1,92 @@
 <template>
   <v-container fluid>
-   <v-row>
-     <v-col>
-<v-form :lazy-validation="lazy" ref="form" :v-model="valid">
-  <v-row class="ml-2 mr-2">
- <v-text-field v-model="emailid" placeholder="Email ID" :rules="emailRules" outlined type="email" required>
+    <v-row>
+      <v-col>
+        <v-dialog v-model="opendialog" width="500">
+          <v-card dark>
+            <v-card-title class="headline lighten-2" primary-title>Doing LMS</v-card-title>
+            <v-card-text v-if="!gotresponse">Waiting for response</v-card-text>
+            <v-card-text v-if="id!=''">{{ id}}</v-card-text>
 
-    </v-text-field>
-  </v-row>
-    <v-row class="ml-2 mr-2">
-    <v-text-field v-model="password" placeholder="Password" type="password" :rules="passwordRules" required
- outlined></v-text-field>
+            <v-divider></v-divider>
 
+            <v-card-actions>
+              <div class="flex-grow-1"></div>
+              <v-btn
+                color="primary"
+                text
+                @click="()=> {opendialog = false;gotresponse=false;}"
+              >I accept</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+        <v-form :lazy-validation="lazy" ref="form" :v-model="valid">
+          <v-row class="ml-2 mr-2">
+            <v-text-field
+              v-model="emailid"
+              placeholder="Email ID"
+              :rules="emailRules"
+              outlined
+              type="email"
+              required
+            ></v-text-field>
+          </v-row>
+          <v-row class="ml-2 mr-2">
+            <v-text-field
+              v-model="password"
+              placeholder="Password"
+              type="password"
+              :rules="passwordRules"
+              required
+              outlined
+            ></v-text-field>
+          </v-row>
+          <v-row justify="center">
+            <v-btn outlined @click="validate" :disabled="justclicked">Start</v-btn>
+          </v-row>
+        </v-form>
+      </v-col>
     </v-row>
-    <v-row justify="center">
-             <v-btn outlined @click="validate"> Start  </v-btn>
-
-
-    </v-row>
-     </v-form>
-     </v-col>
-     
-   </v-row>
   </v-container>
 </template>
 <style scoped>
-
 </style>
 <script>
-import axios from 'axios';
+import axios from "axios";
 export default {
   data: () => ({
-    valid : true,
-    emailid  : "",
-    password : "",
-    show1 : false,
-    emailRules : [
-      v => !!v || 'E-mail is required',
-        v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+    valid: true,
+    justclicked: false,
+    gotresponse: false,
+    emailid: "",
+    password: "",
+    id: "",
+    opendialog: false,
+    show1: false,
+    emailRules: [
+      v => !!v || "E-mail is required",
+      v => /.+@.+\..+/.test(v) || "E-mail must be valid"
     ],
-    passwordRules : [
-      v => !!v || 'Password is required'
-    ],
-    lazy : false
-   
-    
-}),
-methods : {
-  async validate (){
-    if(this.$refs.form.validate())
-    {
-      
-        axios.get("http://localhost:8000/home/?emailid="+this.emailid).then((response)=>{
-          console.log(response.data);
-        });
+    passwordRules: [v => !!v || "Password is required"],
+    lazy: false
+  }),
+  methods: {
+    async validate() {
+      if (this.$refs.form.validate()) {
+        this.justclicked = true;
+        this.opendialog = true;
+        let response = await axios.get(
+          "http://localhost:8000/home/?emailid=" +
+            this.emailid +
+            "&password=" +
+            this.password
+        );
+        //console.log(response.data);
+        this.id = response.data;
+        this.gotresponse = true;
+        this.justclicked = false;
+      }
     }
-
   }
-}
 };
 </script>
