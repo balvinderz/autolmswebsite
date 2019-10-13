@@ -41,6 +41,12 @@
               outlined
             ></v-text-field>
           </v-row>
+          <v-row class="ml-2 mr-2">
+            <v-checkbox v-model="doquiz" color="black" label="Do quiz ? "></v-checkbox>
+          </v-row>
+          <v-row class="ml-2 mr-2">
+            <v-checkbox v-model="dodiscussionform" color="black" label="Do Discussion form ? "></v-checkbox>
+          </v-row>
           <v-row justify="center">
             <v-btn outlined @click="validate" :disabled="justclicked">Start</v-btn>
           </v-row>
@@ -60,6 +66,8 @@ export default {
     gotresponse: false,
     emailid: "",
     password: "",
+    doquiz: true,
+    dodiscussionform: true,
     id: "",
     opendialog: false,
     show1: false,
@@ -75,11 +83,21 @@ export default {
       if (this.$refs.form.validate()) {
         this.justclicked = true;
         this.opendialog = true;
+        this.gotresponse = false;
+        this.id = "";
+        var doquiz = "0";
+        var dodiscussionform = "0";
+        if (this.doquiz) doquiz = "1";
+        if (this.dodiscussionform) dodiscussionform = "1";
         let response = await axios.get(
           "http://localhost:8000/home/?emailid=" +
             this.emailid +
             "&password=" +
-            this.password
+            this.password +
+            "&doquiz=" +
+            doquiz +
+            "&dodiscussionform=" +
+            dodiscussionform
         );
         //console.log(response.data);
         this.id = response.data;
