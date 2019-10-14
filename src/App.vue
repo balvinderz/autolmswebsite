@@ -5,31 +5,24 @@
         <span>Auto LMS</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn
-        text
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-      >
-        <span class="mr-2">Bana ke rahunga  </span>
-      </v-btn>
     </v-app-bar>
 
     <v-content>
-      <Home/>
+      <Home />
     </v-content>
   </v-app>
 </template>
 
 <script>
-import Home from './components/Home';
+import Home from "./components/Home";
 
 export default {
-  name: ' ',
+  name: " ",
   components: {
-    Home,
+    Home
   },
   data: () => ({
     //
-  }),
+  })
 };
 </script>

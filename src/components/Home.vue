@@ -5,7 +5,9 @@
         <v-dialog v-model="opendialog" width="500">
           <v-card dark>
             <v-card-title class="headline lighten-2" primary-title>Doing LMS</v-card-title>
-            <v-card-text v-if="!gotresponse">Waiting for response</v-card-text>
+            <v-card-text
+              v-if="!gotresponse"
+            >Waiting for response. Your Auto LMS will be done automatically. You can close this website if you want to .</v-card-text>
             <v-card-text v-if="id!=''">{{ id}}</v-card-text>
 
             <v-divider></v-divider>
@@ -73,7 +75,8 @@ export default {
     show1: false,
     emailRules: [
       v => !!v || "E-mail is required",
-      v => /.+@.+\..+/.test(v) || "E-mail must be valid"
+      v => /.+@.+\..+/.test(v) || "E-mail must be valid",
+      v => /.*@rait\.ac\.in$/gm.test(v) || "Email must end with rait.ac.in"
     ],
     passwordRules: [v => !!v || "Password is required"],
     lazy: false
@@ -90,7 +93,7 @@ export default {
         if (this.doquiz) doquiz = "1";
         if (this.dodiscussionform) dodiscussionform = "1";
         let response = await axios.get(
-          "http://localhost:8000/home/?emailid=" +
+          "/home/?emailid=" +
             this.emailid +
             "&password=" +
             this.password +
@@ -108,3 +111,4 @@ export default {
   }
 };
 </script>
+ 
