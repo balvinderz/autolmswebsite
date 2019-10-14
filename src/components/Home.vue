@@ -18,7 +18,7 @@
                 color="primary"
                 text
                 @click="()=> {opendialog = false;gotresponse=false;}"
-              >I accept</v-btn>
+              >Okay</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
